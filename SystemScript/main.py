@@ -1,12 +1,13 @@
 import cv2
 import time
-import argparse
+import re
+import subprocess
 
 from dependencies.server_interface import ServerInterface
 from dependencies.bluetooth_interface import BluetoothInterface
 import dependencies.configuration as conf
 
-def main(args):
+def main():
 
     # Initialize server and bluetooth interfaces
     server = ServerInterface()
@@ -42,8 +43,13 @@ def main(args):
     while True:
         try:
 
-            # Open camera
-            cap = cv2.VideoCapture(args.device)
+            # Find and open camera
+            camera = find_camera_device()
+            if camera is None:
+                server.log("No camera found.", mode="error")
+                break
+            else:
+                cap = cv2.VideoCapture()
 
             # Set camera resolution
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
@@ -51,7 +57,6 @@ def main(args):
 
             try:
 
-                # Keep capturing images until error occurs
                 while True:
 
                     # Check if camera is still active on server
@@ -69,7 +74,7 @@ def main(args):
                     server.send_to_server(frame)
                     
                     # Delay before capturing next image
-                    time.sleep(args.delay)
+                    time.sleep(2)
             
             # If error occurs, try again
             except Exception as e:
@@ -89,16 +94,25 @@ def main(args):
             server.log("Permanently closed due to forced exit.", mode="info")
             break
 
-# Format device argument to be either an integer or string
-def valid_device(device):
-    try:
-        return int(device)
-    except ValueError:
-        return str(device)
+# Find the camera device
+def find_camera_device():
+
+    # Iterate through the first 10 video devices
+    for i in range(10):
+        try:
+            # Run v4l2-ctl to find the formats supported by the device
+            output = subprocess.check_output(["v4l2-ctl", "--device=/dev/video" + str(i), "--list-formats"])
+        except subprocess.CalledProcessError:
+            # If the device does not exist, skip to the next one
+            continue
+
+        # Check if the device supports a streaming video format (e.g., 'YUYV', 'MJPG', 'H264')
+        if re.search(b'\'JPEG\'', output):
+            return i
+
+    # If no suitable device is found, return None
+    return None
+        
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Capture images every few seconds.')
-    parser.add_argument('--delay', type=float, default=2, help='Delay time in seconds between capturing images.')
-    parser.add_argument('--device', type=valid_device, required=True, help='Index or path of the camera to use for capturing images.')
-    args = parser.parse_args()
-    main(args)
+    main()

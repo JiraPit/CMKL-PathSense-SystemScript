@@ -2,10 +2,16 @@
 
 echo "Installing PathSense system script..."
 
+sudo apt-get update
+sudo apt-get install v4l-utils
+sudo apt-get install python-opencv
+sudo apt-get install libbluetooth-dev
+sudo apt-get install python-pybluez
+
 # Copy the SystemScript folder to the root directory
 cp -r SystemScript /
 
-echo "PathSense system script downloaded"
+echo "PathSense system script installed"
 
 # Check if main.py is already in the boot file
 if grep -Fxq "python /SystemScript/main.py &" /etc/rc.local
