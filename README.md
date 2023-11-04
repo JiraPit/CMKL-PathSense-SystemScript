@@ -10,7 +10,7 @@ git clone https://github.com/JiraPit/PathSense-SystemScript.git
 cd PathSense-SystemScript
 ```
 
-Install
+Run setup
 ```sh
 chmod +x setup.sh
 sudo ./setup.sh
