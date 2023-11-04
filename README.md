@@ -12,6 +12,6 @@ cd PathSense-SystemScript
 
 Install
 ```sh
-chmod +x install.sh
-sudo install.sh
+chmod +x setup.sh
+sudo ./setup.sh
 ```
