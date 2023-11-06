@@ -11,7 +11,7 @@ class BluetoothInterface:
     def turn_on(self):
         self.__socket.bind(("", bluetooth.PORT_ANY))
         self.__socket.listen(1)
-        bluetooth.advertise_service(self.__socket, "PathSense Bag")
+        bluetooth.advertise_service(self.__socket, "PathSense Bag",profiles=[bluetooth.SERIAL_PORT_PROFILE])
 
     # Turn Bluetooth off
     def turn_off(self):
