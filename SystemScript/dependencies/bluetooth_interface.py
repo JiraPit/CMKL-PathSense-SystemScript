@@ -9,9 +9,17 @@ class BluetoothInterface:
 
     # Turn Bluetooth on and make it discoverable
     def turn_on(self):
+        uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
         self.__socket.bind(("", bluetooth.PORT_ANY))
         self.__socket.listen(1)
-        bluetooth.advertise_service(self.__socket, "PathSense Bag",profiles=[bluetooth.SERIAL_PORT_PROFILE])
+        bluetooth.advertise_service(
+            self.__socket, 
+            "PathSense Bag",
+            service_id=uuid,
+            service_classes=[uuid, bluetooth.SERIAL_PORT_CLASS],
+            profiles=[bluetooth.SERIAL_PORT_PROFILE],
+            
+        )
 
     # Turn Bluetooth off
     def turn_off(self):
