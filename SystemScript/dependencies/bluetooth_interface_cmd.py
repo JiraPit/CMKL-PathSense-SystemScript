@@ -38,5 +38,5 @@ class BluetoothInterface:
                     break
             return address
         except Exception as e:
-            self.server.log(e, mode="error")
+            # self.server.log(e, mode="error")
             return None
