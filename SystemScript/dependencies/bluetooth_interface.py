@@ -15,10 +15,6 @@ class BluetoothInterface:
         bluetooth.advertise_service(
             self.__socket, 
             "PathSense Bag",
-            service_id=uuid,
-            service_classes=[uuid, bluetooth.SERIAL_PORT_CLASS],
-            profiles=[bluetooth.SERIAL_PORT_PROFILE],
-            
         )
 
     # Turn Bluetooth off
