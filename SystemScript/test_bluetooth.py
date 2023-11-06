@@ -3,10 +3,10 @@ import time
 
 def main():
     bluetooth = BluetoothInterface()
-
+    print("Turning on bluetooth...")
     bluetooth.turn_on()
-
     while True:
+        print("Getting client address...")
         address = bluetooth.get_client_address()
         print(address)
         time.sleep(2)
