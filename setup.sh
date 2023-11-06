@@ -4,7 +4,7 @@ echo "Installing PathSense system script..."
 
 sudo apt-get update
 sudo apt-get install v4l-utils
-sudo apt-get install python-opencv
+sudo apt-get install python3-opencv
 sudo apt-get install libbluetooth-dev
 sudo apt-get install python-pybluez
 
