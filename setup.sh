@@ -9,6 +9,7 @@ sudo apt-get install v4l-utils -y
 sudo apt-get install python3-dev -y
 sudo apt-get install python3-opencv -y
 sudo apt-get install libbluetooth-dev -y
+sudo apt-get install python3-requests -y
 sudo apt-get install unzip -y
 sudo apt-get install wget -y
 
