@@ -3,10 +3,10 @@
 echo "Installing PathSense system script..."
 
 sudo apt-get update
-sudo apt-get install v4l-utils
-sudo apt-get install python3-opencv
-sudo apt-get install libbluetooth-dev
-sudo apt-get install python-pybluez
+sudo apt-get install v4l-utils -y
+sudo apt-get install python3-opencv -y
+sudo apt-get install libbluetooth-dev -y
+sudo apt-get install python3-pybluez -y
 
 # Copy the SystemScript folder to the root directory
 cp -r SystemScript /
