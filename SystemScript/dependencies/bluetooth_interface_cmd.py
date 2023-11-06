@@ -13,8 +13,7 @@ class BluetoothInterface:
             "default-agent\n"
             "discoverable on\n"
             "pairable on\n"
-            "trust *\n"
-            "quit'"
+            "trust *"
             " | sudo bluetoothctl"
             )
         process = subprocess.Popen(cmd, shell=True)
@@ -22,14 +21,14 @@ class BluetoothInterface:
 
     # Turn Bluetooth off
     def turn_off(self):
-        cmd = "echo -e 'power off\nquit' | sudo bluetoothctl"
+        cmd = "echo -e 'power off' | sudo bluetoothctl"
         process = subprocess.Popen(cmd, shell=True)
         process.communicate()
     
     # Get client device address
     def get_client_address(self):
         try:
-            cmd = "echo -e 'devices\nquit' | sudo bluetoothctl"
+            cmd = "echo -e 'devices' | sudo bluetoothctl"
             process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
             out, _ = process.communicate()
             lines = out.decode('utf-8').split('\n')

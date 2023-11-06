@@ -49,7 +49,7 @@ class ServerInterface:
 
         # Send error to server
         requests.post(
-            f'{self.server_root}/logger',
+            f'{self.server_root}/log',
             json={'message': message, 'mode': mode},
             headers=self.headers,
         )
