@@ -13,7 +13,7 @@ class BluetoothInterface:
             "default-agent\n"
             "discoverable on\n"
             "pairable on\n"
-            "trust *"
+            "trust *'"
             " | sudo bluetoothctl"
             )
         process = subprocess.Popen(cmd, shell=True)
