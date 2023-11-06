@@ -10,3 +10,6 @@ def main():
         address = bluetooth.get_client_address()
         print(address)
         time.sleep(2)
+
+if __name__ == "__main__":
+    main()
