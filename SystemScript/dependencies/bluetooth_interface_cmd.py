@@ -28,12 +28,16 @@ class BluetoothInterface:
     
     # Get client device address
     def get_client_address(self):
-        cmd = "echo -e 'devices\nquit' | sudo bluetoothctl"
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        out, _ = process.communicate()
-        lines = out.decode('utf-8').split('\n')
-        for line in lines:
-            if line.startswith('Device'):
-                address = line.split()[1]
-                break
-        return address
+        try:
+            cmd = "echo -e 'devices\nquit' | sudo bluetoothctl"
+            process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+            out, _ = process.communicate()
+            lines = out.decode('utf-8').split('\n')
+            for line in lines:
+                if line.startswith('Device'):
+                    address = line.split()[1]
+                    break
+            return address
+        except Exception as e:
+            self.server.log(e, mode="error")
+            return None
