@@ -3,13 +3,23 @@
 echo "Installing PathSense system script..."
 
 sudo apt-get update
+sudo apt-get upgrade
+
 sudo apt-get install v4l-utils -y
+sudo apt-get install python3-dev -y
 sudo apt-get install python3-opencv -y
 sudo apt-get install libbluetooth-dev -y
-sudo apt-get install python3-pybluez -y
+sudo apt-get install unzip -y
+sudo apt-get install wget -y
+
+wget https://github.com/pybluez/pybluez/archive/master.zip
+unzip master.zip
+cd pybluez-master
+sudo python setup.py install
+cd ..
 
 # Copy the SystemScript folder to the root directory
-cp -r SystemScript /
+sudo cp -r SystemScript /
 
 echo "PathSense system script installed"
 
