@@ -43,7 +43,7 @@ class ServerInterface:
 
     # Log error to server
     def log(self,message,mode='info'):
-
+ 
         # Print error to console
         print(f"Logging: {message}")
 
