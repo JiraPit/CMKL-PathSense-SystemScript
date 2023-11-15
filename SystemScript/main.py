@@ -37,6 +37,7 @@ def main():
     while True:
         try:
             # Find and open camera
+            cap = None
             camera = find_camera_device()
             if camera is None:
                 server.log("[main] No camera found.", mode="error")
@@ -96,7 +97,7 @@ def find_camera_device():
             continue
 
         # Check if the device supports a streaming video format (e.g., 'YUYV', 'MJPG', 'H264')
-        if re.search(b'\'JPEG\'', output):
+        if re.search(b'\'MJPG\'', output):
             return i
 
     # If no suitable device is found, return None
