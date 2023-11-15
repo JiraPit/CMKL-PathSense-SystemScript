@@ -83,11 +83,11 @@ def main():
             server.log("[main] " + str(e), mode="error")
 
         # If forced to close, close camera and exit permanently
-        finally:
-            if cap != None:
-                cap.release()
-            server.log("[main] force closed", mode="info")
-            break
+        # finally:
+        #     if cap != None:
+        #         cap.release()
+        #     server.log("[main] force closed", mode="info")
+        #     break
 
 # Find the camera device
 def find_camera_device():
