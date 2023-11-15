@@ -34,8 +34,8 @@ def main():
             server.log("[main] Invalid token. Trying again.", mode="error")
     
     # Keep alive until forced to close
-    while True:
-        try:
+    try:
+        while True:
             # Find and open camera
             cap = None
             camera = find_camera_device()
@@ -82,15 +82,14 @@ def main():
                 cap = None
                 time.sleep(5)
         
-        except Exception as e:
-            server.log("[main] " + str(e), mode="error")
+    except Exception as e:
+        server.log("[main] " + str(e), mode="error")
 
-        # If forced to close, close camera and exit permanently
-        finally:
-            if cap != None:
-                cap.release()
-            server.log("[main] force closed", mode="info")
-            break
+    # If forced to close, close camera and exit permanently
+    finally:
+        if cap != None:
+            cap.release()
+        server.log("[main] force closed", mode="info")
 
 # Find the camera device
 def find_camera_device():
