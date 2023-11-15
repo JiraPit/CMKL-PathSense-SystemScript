@@ -55,7 +55,9 @@ def main():
             try:
                 while True:
                     # Check if camera is still active on server
-                    if not server.get_camera_status():
+                    status = server.get_camera_status()
+                    print(f"Camera status: {status}")
+                    if not status:
                         break
 
                     # Capture image

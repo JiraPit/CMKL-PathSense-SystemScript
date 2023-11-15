@@ -35,13 +35,13 @@ class ServerInterface:
 
         # Check if response is valid
         if response.status_code == 200:
-            response = response.json()
+            result = response.json()
 
             # Check if response is successful
-            if response['status'] == 'success':
-                return str(response['result']) == 'true'
+            if result['status'] == 'success':
+                return str(result['result']) == 'true'
             else:
-                self.log(f"[get_camera_status] {response['result']}", mode="error")
+                self.log(f"[get_camera_status] {result['result']}", mode="error")
                 return False
         else:
             self.log(f"[get_camera_status] {response.status_code}", mode="error")
