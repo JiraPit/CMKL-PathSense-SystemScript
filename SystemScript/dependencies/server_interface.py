@@ -36,6 +36,7 @@ class ServerInterface:
         # Check if response is valid
         if response.status_code == 200:
             result = response.json()
+            print(result)
 
             # Check if response is successful
             if result['status'] == 'success':
