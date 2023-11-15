@@ -60,6 +60,8 @@ def main():
 
                     # Capture image
                     ret, frame = cap.read()
+                    print(f"Captured image status: {ret}")
+                    print(f"Captured image: {frame}")
 
                     # If no image captured, break out and try again
                     if not ret:
