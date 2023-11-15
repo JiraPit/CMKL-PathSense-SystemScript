@@ -42,7 +42,7 @@ def main():
                 server.log("[main] No camera found.", mode="error")
                 break
             else:
-                cap = cv2.VideoCapture()
+                cap = cv2.VideoCapture(camera)
 
             # Set camera resolution
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
