@@ -58,6 +58,8 @@ def main():
                     # Capture image
                     ret, frame = cap.read()
 
+                    server.log(f"[main] Captured image status {ret}", mode="info")
+
                     # If no image captured, break out and try again
                     if not ret:
                         break
