@@ -40,7 +40,7 @@ class ServerInterface:
 
             # Check if response is successful
             if result['status'] == 'success':
-                return str(result['result']) == 'true'
+                return result['result']
             else:
                 self.log(f"[get_camera_status] {result['result']}", mode="error")
                 return False
