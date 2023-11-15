@@ -8,7 +8,6 @@ from dependencies.bluetooth_interface import BluetoothInterface
 import dependencies.configuration as conf
 
 def main():
-
     # Initialize server and bluetooth interfaces
     server = ServerInterface()
     bluetooth = BluetoothInterface()
@@ -18,7 +17,6 @@ def main():
 
     # If still invalid, turn on bluetooth start pairing process
     while not conf.is_valid():
-        server.log("Starting pairing process.", mode="info")
         bluetooth.turn_on()
         bluetooth.wait_for_connection()
 
@@ -26,27 +24,22 @@ def main():
         bluetooth.send_message(conf.DID())
 
         # Recieve link token and set it in configuration
-        conf.set_ltoken("55555")
+        conf.set_ltoken("289788498")
 
         # Close bluetooth connection
         bluetooth.turn_off()
 
         # If still invalid, try again
         if not conf.is_valid():
-            server.log("Invalid token. Please try again.", mode="error")
-        else:
-            server.log("Token successfully validated.", mode="info")
+            server.log("[main] Invalid token. Trying again.", mode="error")
     
-    server.log("Starting main life cycle.", mode="info")
-
     # Keep alive until forced to close
     while True:
         try:
-
             # Find and open camera
             camera = find_camera_device()
             if camera is None:
-                server.log("No camera found.", mode="error")
+                server.log("[main] No camera found.", mode="error")
                 break
             else:
                 cap = cv2.VideoCapture()
@@ -56,9 +49,7 @@ def main():
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
             try:
-
                 while True:
-
                     # Check if camera is still active on server
                     if not server.get_camera_status():
                         break
@@ -71,14 +62,14 @@ def main():
                         break
 
                     # Send image to server for path classification
-                    server.send_to_server(frame)
+                    server.process(frame)
                     
                     # Delay before capturing next image
                     time.sleep(2)
             
             # If error occurs, try again
             except Exception as e:
-                server.log(e, mode="error")
+                server.log("[main] " + str(e), mode="error")
 
             # Close camera before trying again in 3x the delay time
             finally:
@@ -91,12 +82,10 @@ def main():
         finally:
             if cap != None:
                 cap.release()
-            server.log("Permanently closed due to forced exit.", mode="info")
             break
 
 # Find the camera device
 def find_camera_device():
-
     # Iterate through the first 10 video devices
     for i in range(10):
         try:
@@ -112,7 +101,6 @@ def find_camera_device():
 
     # If no suitable device is found, return None
     return None
-        
 
 if __name__ == "__main__":
     main()
