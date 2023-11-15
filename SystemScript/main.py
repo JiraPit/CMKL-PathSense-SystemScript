@@ -43,27 +43,23 @@ def main():
                 server.log("[main] No camera found.", mode="error")
                 break
             else:
-                print("Found camera at /dev/video" + str(camera))
                 cap = cv2.VideoCapture(camera)
                 print("Opened camera at /dev/video" + str(camera))
 
             # Set camera resolution
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-            print("Set camera resolution to 320x240")
 
             try:
                 while True:
                     # Check if camera is still active on server
                     status = server.get_camera_status()
-                    print(f"Camera status: {status}")
                     if not status:
+                        print("Camera is not active on server. Waiting for server to activate camera.")
                         break
 
                     # Capture image
                     ret, frame = cap.read()
-                    print(f"Captured image status: {ret}")
-                    print(f"Captured image: {frame}")
 
                     # If no image captured, break out and try again
                     if not ret:
@@ -80,21 +76,21 @@ def main():
                 server.log("[main] " + str(e), mode="error")
 
             # Close camera before trying again in 3x the delay time
-            # finally:
-            #     if cap != None:
-            #         cap.release()
-            #     cap = None
-            #     time.sleep(5)
+            finally:
+                if cap != None:
+                    cap.release()
+                cap = None
+                time.sleep(5)
         
         except Exception as e:
             server.log("[main] " + str(e), mode="error")
 
         # If forced to close, close camera and exit permanently
-        # finally:
-        #     if cap != None:
-        #         cap.release()
-        #     server.log("[main] force closed", mode="info")
-        #     break
+        finally:
+            if cap != None:
+                cap.release()
+            server.log("[main] force closed", mode="info")
+            break
 
 # Find the camera device
 def find_camera_device():
