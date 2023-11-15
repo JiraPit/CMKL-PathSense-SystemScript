@@ -80,12 +80,13 @@ def main():
                 time.sleep(5)
         
         except Exception as e:
-                server.log("[main] " + str(e), mode="error")
+            server.log("[main] " + str(e), mode="error")
 
         # If forced to close, close camera and exit permanently
         finally:
             if cap != None:
                 cap.release()
+            server.log("[main] force closed", mode="info")
             break
 
 # Find the camera device
