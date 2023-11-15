@@ -73,11 +73,11 @@ def main():
                 server.log("[main] " + str(e), mode="error")
 
             # Close camera before trying again in 3x the delay time
-            finally:
-                if cap != None:
-                    cap.release()
-                cap = None
-                time.sleep(5)
+            # finally:
+            #     if cap != None:
+            #         cap.release()
+            #     cap = None
+            #     time.sleep(5)
         
         except Exception as e:
             server.log("[main] " + str(e), mode="error")
