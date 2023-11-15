@@ -43,11 +43,14 @@ def main():
                 server.log("[main] No camera found.", mode="error")
                 break
             else:
+                print("Found camera at /dev/video" + str(camera))
                 cap = cv2.VideoCapture(camera)
+                print("Opened camera at /dev/video" + str(camera))
 
             # Set camera resolution
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+            print("Set camera resolution to 320x240")
 
             try:
                 while True:
@@ -57,8 +60,6 @@ def main():
 
                     # Capture image
                     ret, frame = cap.read()
-
-                    server.log(f"[main] Captured image status {ret}", mode="info")
 
                     # If no image captured, break out and try again
                     if not ret:
