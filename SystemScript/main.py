@@ -89,7 +89,7 @@ def main():
     finally:
         if cap != None:
             cap.release()
-        server.log("[main] force closed", mode="info")
+        print("force closed")
 
 # Find the camera device
 def find_camera_device():
