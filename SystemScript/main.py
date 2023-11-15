@@ -78,6 +78,9 @@ def main():
                     cap.release()
                 cap = None
                 time.sleep(5)
+        
+        except Exception as e:
+                server.log("[main] " + str(e), mode="error")
 
         # If forced to close, close camera and exit permanently
         finally:
