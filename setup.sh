@@ -25,12 +25,12 @@ sudo cp -r SystemScript /
 echo "PathSense system script installed"
 
 # Check if main.py is already in the boot file
-if grep -Fxq "python /SystemScript/main.py &" /etc/rc.local
+if grep -Fxq "cd /SystemScript && python main.py &" /etc/rc.local
 then
     echo "PathSense system script is already set to run at boot"
 else
     # If not, add the command to the boot file
-    sed -i '$i python /SystemScript/main.py &' /etc/rc.local
+    sed -i '$i cd /SystemScript && python main.py &' /etc/rc.local
     echo "PathSense system script is now set to run at boot"
 fi
 
