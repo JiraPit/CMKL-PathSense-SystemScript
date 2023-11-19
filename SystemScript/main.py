@@ -71,6 +71,11 @@ def main():
                     # Delay before capturing next image
                     time.sleep(2)
             
+            # If forced to close, close camera and exit
+            except KeyboardInterrupt:
+                print("Keyboard interrupted")
+                break
+            
             # If error occurs, try again
             except Exception as e:
                 server.log("[main] " + str(e), mode="error")

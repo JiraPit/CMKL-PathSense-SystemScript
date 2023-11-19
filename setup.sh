@@ -13,16 +13,18 @@ sudo apt-get install python3-requests -y
 sudo apt-get install unzip -y
 sudo apt-get install wget -y
 
+sudo rm -d -r pybluez-master
+sudo rm master.zip
 wget https://github.com/pybluez/pybluez/archive/master.zip
 unzip master.zip
 cd pybluez-master
-sudo python setup.py install
+yes all | sudo python setup.py install
 cd ..
 
 # Copy the SystemScript folder to the root directory
 sudo cp -r SystemScript /
 
-echo "PathSense system script installed"
+echo "PathSense system script added to root directory"
 
 # Check if main.py is already in the boot file
 if grep -Fxq "cd /SystemScript && python main.py &" /etc/rc.local
@@ -35,3 +37,4 @@ else
 fi
 
 echo "PathSense system script installation complete"
+echo "Reboot to start the system script"
