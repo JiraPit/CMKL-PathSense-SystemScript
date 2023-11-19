@@ -53,21 +53,28 @@ def main():
             try:
                 while True:
                     # Check if camera is still active on server
+                    marker = time.time()
                     status = server.get_camera_status()
                     if not status:
                         print("Camera is not active on server. Waiting for server to activate camera.")
                         break
+                    print(f"Get camera status took {time.time() - marker} seconds")
 
+                    marker = time.time()
                     # Capture image
                     ret, frame = cap.read()
 
                     # If no image captured, break out and try again
                     if not ret:
                         break
+                    print(f"Capture image took {time.time() - marker} seconds")
 
+                    marker = time.time()
                     # Send image to server for path classification
                     server.process(frame)
-                    
+                    print(f"Process image took {time.time() - marker} seconds")
+
+                    print("Waiting for 2 seconds...\n\n")
                     # Delay before capturing next image
                     time.sleep(2)
             
@@ -80,7 +87,7 @@ def main():
             except Exception as e:
                 server.log("[main] " + str(e), mode="error")
 
-            # Close camera before trying again in 3x the delay time
+            # Close camera before trying again in 5 seconds
             finally:
                 if cap != None:
                     cap.release()
