@@ -60,22 +60,19 @@ def main():
                         break
                     print(f"Get camera status took {time.time() - marker:.6f} seconds")
 
-                    marker = time.time()
                     # Capture image
+                    marker = time.time()
                     ret, frame = cap.read()
-
-                    # If no image captured, break out and try again
-                    if not ret:
-                        break
+                    if not ret: break
                     print(f"Capture image took {time.time() - marker:.6f} seconds")
 
-                    marker = time.time()
                     # Send image to server for path classification
+                    marker = time.time()
                     server.process(frame)
                     print(f"Process image took {time.time() - marker:.6f} seconds")
 
-                    print("Waiting for 2 seconds...\n\n")
                     # Delay before capturing next image
+                    print("Waiting for 2 seconds...\n\n")
                     time.sleep(2)
             
             # If forced to close, close camera and exit
