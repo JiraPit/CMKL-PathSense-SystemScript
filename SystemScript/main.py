@@ -13,17 +13,21 @@ def main():
     bluetooth = BluetoothInterface()
 
     # Validate tokens and restore if invalid
+    print("Validating tokens...")
     conf.restore() if not conf.is_valid() else None
 
     # If still invalid, turn on bluetooth start pairing process
     while not conf.is_valid():
+        print("Invalid token. Turning on bluetooth and waiting for connection...")
         bluetooth.turn_on()
         bluetooth.wait_for_connection()
 
         # Send DID to client
+        print("Bluetooth connected. Sending DID...")
         bluetooth.send_message(conf.DID())
 
         # Recieve link token and set it in configuration
+        print("Link token recieved. Finishing pairing process...")
         conf.set_ltoken("289788498")
 
         # Close bluetooth connection
@@ -39,12 +43,14 @@ def main():
             # Find and open camera
             cap = None
             camera = find_camera_device()
+            print(f"Opening camera at /dev/video{camera}...")
+            marker = time.time()
             if camera is None:
                 server.log("[main] No camera found.", mode="error")
                 break
             else:
                 cap = cv2.VideoCapture(camera)
-                print("Opened camera at /dev/video" + str(camera))
+            print(f"Opening camera took {time.time() - marker:.6f} seconds")
 
             # Set camera resolution
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
@@ -53,6 +59,7 @@ def main():
             try:
                 while True:
                     # Check if camera is still active on server
+                    print("Checking camera status...")
                     marker = time.time()
                     status = server.get_camera_status()
                     if not status:
@@ -61,6 +68,7 @@ def main():
                     print(f"Get camera status took {time.time() - marker:.6f} seconds")
 
                     # Capture image
+                    print("Capturing image...")
                     marker = time.time()
                     ret, frame = cap.read()
                     if not ret: 
@@ -68,9 +76,10 @@ def main():
                     print(f"Capture image took {time.time() - marker:.6f} seconds")
 
                     # Send image to server for path classification
+                    print("Sending image to server...")
                     marker = time.time()
                     server.process(frame)
-                    print(f"Process image took {time.time() - marker:.6f} seconds")
+                    print(f"Sending image to server took {time.time() - marker:.6f} seconds")
 
                     # Delay before capturing next image
                     print("Waiting for 2 seconds...\n\n")

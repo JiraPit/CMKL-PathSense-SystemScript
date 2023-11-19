@@ -60,4 +60,4 @@ class ServerInterface:
                 headers=self.headers,
             )
         except:
-            pass
+            return
