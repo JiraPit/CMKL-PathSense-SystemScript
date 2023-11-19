@@ -49,12 +49,15 @@ class ServerInterface:
 
     # Log error to server
     def log(self,message,mode='info'):
-        # Print error to console
-        print(f"Logging: {message}")
+        try:
+            # Print error to console
+            print(f"Logging: {message}")
 
-        # Send error to server
-        requests.post(
-            f'{self.server_root}/client-log',
-            json={'message': message, 'mode': mode},
-            headers=self.headers,
-        )
+            # Send error to server
+            requests.post(
+                f'{self.server_root}/client-log',
+                json={'message': message, 'mode': mode},
+                headers=self.headers,
+            )
+        except:
+            pass
