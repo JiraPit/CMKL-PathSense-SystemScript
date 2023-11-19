@@ -63,7 +63,8 @@ def main():
                     # Capture image
                     marker = time.time()
                     ret, frame = cap.read()
-                    if not ret: break
+                    if not ret: 
+                        break
                     print(f"Capture image took {time.time() - marker:.6f} seconds")
 
                     # Send image to server for path classification
