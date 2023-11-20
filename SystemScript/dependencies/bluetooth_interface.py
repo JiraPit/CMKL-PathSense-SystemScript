@@ -24,7 +24,7 @@ class BluetoothInterface:
     # Wait for connection from mobile app and return address
     def wait_for_connection(self):
         self.__client_sock, client_info = self.__socket.accept()
-        self.__server.log(f"[wait_for_connection] Accepted connection from {client_info}", mode="info")
+        self.__server.client_log(f"[wait_for_connection] Accepted connection from {client_info}", mode="info")
 
     # Send a message to the client
     def send_message(self, message):
@@ -32,9 +32,9 @@ class BluetoothInterface:
             try:
                 self.__client_sock.send(message)
             except Exception as e:
-                self.__server.log("[send_message] "+ str(e), mode="error")
+                self.__server.client_log("[send_message] "+ str(e), mode="error")
         else:
-            self.__server.log("[send_message] Can't send message because no client connected", mode="error")
+            self.__server.client_log("[send_message] Can't send message because no client connected", mode="error")
     
     # Receive a message from the client
     def receive_message(self):
@@ -42,4 +42,4 @@ class BluetoothInterface:
             message = self.__client_sock.recv(1024)
             return message.decode('utf-8')
         else:
-            self.__server.log("[receive_message] Can't receive message because no client connected", mode="error")
+            self.__server.client_log("[receive_message] Can't receive message because no client connected", mode="error")

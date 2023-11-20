@@ -36,8 +36,8 @@ def main():
 
         # If still invalid, try again
         if not conf.is_valid():
-            server.log("[main] Invalid token. Trying again.", mode="error")
-    
+            server.client_log("[main] Invalid token. Trying again.", mode="error")
+
     # Keep alive until forced to close
     try:
         while True:
@@ -47,7 +47,7 @@ def main():
             print(f"Opening camera at /dev/video{camera}...")
             marker = time.time()
             if camera is None:
-                server.log("[main] No camera found.", mode="error")
+                server.client_log("[main] No camera found.", mode="error")
                 break
             else:
                 cap = cv2.VideoCapture(camera)
@@ -63,15 +63,6 @@ def main():
 
             try:
                 while True:
-                    # Check if camera is still active on server
-                    print("Checking camera status...")
-                    marker = time.time()
-                    status = server.get_camera_status()
-                    if not status:
-                        print("Camera is not active on server. Waiting for server to activate camera.")
-                        break
-                    print(f"Get camera status took {time.time() - marker:.6f} seconds")
-
                     # Capture image
                     print("Capturing image...")
                     marker = time.time()
@@ -85,11 +76,12 @@ def main():
                     marker = time.time()
                     result = server.process(frame)
                     print(f"Sending image to server took {time.time() - marker:.6f} seconds")
-                    print(f"Result: {[key for key, value in dict(result['result']).items() if value == 1]}")
-
-                    # Clear out buffer (read and discard several frames)
-                    for _ in range(15):
-                        cap.read()
+                    if result["status"] == "success":
+                        if result["camera_status"] == True:
+                            print(f"Result: {[key for key, value in dict(result['result']).items() if value == 1]}")
+                        else:
+                            print("Camera is not active. Try again in 5 seconds...\n\n")
+                            break
 
                     # Delay before capturing next image
                     print("Waiting for 2 seconds...\n\n")
@@ -102,7 +94,7 @@ def main():
             
             # If error occurs, try again
             except Exception as e:
-                server.log("[main] " + str(e), mode="error")
+                server.client_log("[main] " + str(e), mode="error")
 
             # Close camera before trying again in 5 seconds
             finally:
@@ -114,7 +106,7 @@ def main():
                 time.sleep(5)
         
     except Exception as e:
-        server.log("[main] " + str(e), mode="error")
+        server.client_log("[main] " + str(e), mode="error")
 
     # If forced to close, close camera and exit permanently
     finally:

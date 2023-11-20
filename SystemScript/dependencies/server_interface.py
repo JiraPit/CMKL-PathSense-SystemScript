@@ -22,33 +22,11 @@ class ServerInterface:
         if response.status_code == 200:
             return dict(response.json())
         else:
-            self.log(f"[process] {response.status_code}", mode="error")
+            self.client_log(f"[process] {response.status_code}", mode="error")
             return None
 
-    # Get camera status from server
-    def get_camera_status(self):
-        # Get camera status from server
-        response = requests.get(
-            f'{self.server_root}/camera-status',
-            headers=self.headers,
-        )
-
-        # Check if response is valid
-        if response.status_code == 200:
-            result = response.json()
-
-            # Check if response is successful
-            if result['status'] == 'success':
-                return result['result']
-            else:
-                self.log(f"[get_camera_status] {result['result']}", mode="error")
-                return False
-        else:
-            self.log(f"[get_camera_status] {response.status_code}", mode="error")
-            return False
-
     # Log error to server
-    def log(self,message,mode='info'):
+    def client_log(self,message,mode='info'):
         try:
             # Print error to console
             print(f"Logging: {message}")
