@@ -1,4 +1,5 @@
 import threading
+import time
 
 class CameraThreader(threading.Thread):
     def __init__(self, cap):
@@ -11,10 +12,11 @@ class CameraThreader(threading.Thread):
         while self.running:
             ret, frame = self.cap.read()
             if ret:
-                self.last_frame = frame
+                if frame is not None:
+                    self.last_frame = frame
             else:
-                self.last_frame = None
                 self.stop()
+            time.sleep(0.05)
     
     def read_last_frame(self):
         return self.running, self.last_frame
