@@ -78,8 +78,9 @@ def main():
                     # Send image to server for path classification
                     print("Sending image to server...")
                     marker = time.time()
-                    server.process(frame)
+                    result = server.process(frame)
                     print(f"Sending image to server took {time.time() - marker:.6f} seconds")
+                    print(f"Result: {[r[0] for r in dict(result['result']).items() if r[1] == 1]}")
 
                     # Delay before capturing next image
                     print("Waiting for 2 seconds...\n\n")
