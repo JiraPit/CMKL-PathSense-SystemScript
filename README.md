@@ -10,8 +10,18 @@ git clone https://github.com/JiraPit/PathSense-SystemScript.git
 cd PathSense-SystemScript
 ```
 
-Run setup
+Run setup install
 ```sh
-chmod +x setup.sh
-sudo ./setup.sh
+sudo python setup.py install
+```
+
+To update, run the following commands in the repository directory
+```sh
+git pull
+sudo python setup.py update
+```
+
+To stop the script from running on boot, run the following command
+```sh
+sudo python setup.py remove-from-boot
 ```
