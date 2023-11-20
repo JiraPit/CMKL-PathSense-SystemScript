@@ -5,6 +5,7 @@ import subprocess
 
 from dependencies.server_interface import ServerInterface
 from dependencies.bluetooth_interface import BluetoothInterface
+from dependencies.camera_threading import CameraThreader
 import dependencies.configuration as conf
 
 def main():
@@ -56,6 +57,10 @@ def main():
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
+            #start camera threader
+            cam_thread = CameraThreader(cap)
+            cam_thread.start()
+
             try:
                 while True:
                     # Check if camera is still active on server
@@ -70,8 +75,8 @@ def main():
                     # Capture image
                     print("Capturing image...")
                     marker = time.time()
-                    ret, frame = cap.read()
-                    if not ret: 
+                    running, frame = cam_thread.read_last_frame()
+                    if not running: 
                         break
                     print(f"Capture image took {time.time() - marker:.6f} seconds")
 
@@ -80,7 +85,11 @@ def main():
                     marker = time.time()
                     result = server.process(frame)
                     print(f"Sending image to server took {time.time() - marker:.6f} seconds")
-                    print(f"Result: {[key for key, value in result['result'].items() if value == 1]}")
+                    print(f"Result: {[key for key, value in dict(result['result']).items() if value == 1]}")
+
+                    # Clear out buffer (read and discard several frames)
+                    for _ in range(15):
+                        cap.read()
 
                     # Delay before capturing next image
                     print("Waiting for 2 seconds...\n\n")
@@ -99,6 +108,8 @@ def main():
             finally:
                 if cap != None:
                     cap.release()
+                if cam_thread != None:
+                    cam_thread.stop()
                 cap = None
                 time.sleep(5)
         
@@ -109,6 +120,8 @@ def main():
     finally:
         if cap != None:
             cap.release()
+        if cam_thread != None:
+            cam_thread.stop()
         print("force closed")
 
 # Find the camera device
