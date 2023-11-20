@@ -20,7 +20,7 @@ class ServerInterface:
             headers=self.headers,
         )
         if response.status_code == 200:
-            return response.json()
+            return dict(response.json())
         else:
             self.log(f"[process] {response.status_code}", mode="error")
             return None

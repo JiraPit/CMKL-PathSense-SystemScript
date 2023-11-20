@@ -80,7 +80,7 @@ def main():
                     marker = time.time()
                     result = server.process(frame)
                     print(f"Sending image to server took {time.time() - marker:.6f} seconds")
-                    print(f"Result: {[key for key, value in result["result"].items() if value == 1]}")
+                    print(f"Result: {[key for key, value in result['result'].items() if value == 1]}")
 
                     # Delay before capturing next image
                     print("Waiting for 2 seconds...\n\n")
