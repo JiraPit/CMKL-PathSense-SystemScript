@@ -1,5 +1,4 @@
 import threading
-import time
 
 class CameraThreader(threading.Thread):
     def __init__(self, cap):
@@ -7,19 +6,25 @@ class CameraThreader(threading.Thread):
         self.cap = cap
         self.last_frame = None
         self.running = True
+        self.frame_ready = threading.Condition()
 
     def run(self):
         while self.running:
             ret, frame = self.cap.read()
             if ret:
-                if frame is not None:
-                    self.last_frame = frame
+                if frame is not None and frame.size > 0:
+                    with self.frame_ready:
+                        self.last_frame = frame
+                        self.frame_ready.notify()
             else:
-                self.stop()
-            time.sleep(0.05)
-    
+                self.cap.release()
+                self.running = False
+
     def read_last_frame(self):
-        return self.running, self.last_frame
+        with self.frame_ready:
+            self.frame_ready.wait()
+            return self.running, self.last_frame
 
     def stop(self):
+        self.cap.release()
         self.running = False
